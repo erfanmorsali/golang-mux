@@ -9,7 +9,7 @@ type DBHandler struct {
 	DB *sql.DB
 }
 
-func ConnectToDataBase() (DB *DBHandler, err error) {
+func ConnectToDataBase() (*DBHandler, error) {
 	db, err := sql.Open("mysql", "root:12654778@/proto_practice")
 	if err != nil {
 		return nil, err
@@ -19,4 +19,3 @@ func ConnectToDataBase() (DB *DBHandler, err error) {
 	}
 	return database, nil
 }
-
