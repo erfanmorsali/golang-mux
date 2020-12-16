@@ -25,15 +25,12 @@ func NewPersonAPiHandler(db *database.DBHandler) *PersonAPiHandler {
 func (p *PersonAPiHandler) GetAllPersons(res http.ResponseWriter, req *http.Request) {
 	people, err := p.DBHandler.GeTAllPeople()
 	if err != nil {
-		log.Println(err)
+		res.Write([]byte("somethings wrong"))
+		res.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	bytes, err := json.Marshal(people)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	res.Write(bytes)
+	res.WriteHeader(http.StatusOK)
+	json.NewEncoder(res).Encode(people)
 }
 
 func (p *PersonAPiHandler) GetPersonById(res http.ResponseWriter, req *http.Request) {
@@ -50,14 +47,8 @@ func (p *PersonAPiHandler) GetPersonById(res http.ResponseWriter, req *http.Requ
 		res.Write([]byte("Not Found"))
 		return
 	}
-	bytes, err := json.Marshal(person)
-	if err != nil {
-		res.WriteHeader(http.StatusInternalServerError)
-		res.Write([]byte("somethings wrong"))
-		return
-	}
+	json.NewEncoder(res).Encode(person)
 	res.WriteHeader(http.StatusOK)
-	res.Write(bytes)
 }
 
 func (p *PersonAPiHandler) GetPersonByName(res http.ResponseWriter, req *http.Request) {
